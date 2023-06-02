@@ -13,4 +13,5 @@ python app.py
 ```
 python main.py --slack_channel {Botを実行するSlackのチャンネル名}
 ```
+ストリーミングモードをプルダウンで選択した場合にはLLMが回答を作成する際、全文の生成完了を待たずに100tokens 生成するたびにSlackに順次回答を投稿する。
 ![image](https://github.com/otterer/PBL/assets/82159549/47590a08-fa50-4b41-8918-4e003390cb5a)
