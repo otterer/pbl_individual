@@ -5,13 +5,14 @@ from dotenv import load_dotenv
 from langchain import LLMChain
 from langchain.callbacks.manager import CallbackManager
 from langchain.chat_models import ChatOpenAI
-from langchain.prompts.chat import ChatPromptTemplate, HumanMessagePromptTemplate, SystemMessagePromptTemplate
+from langchain.prompts.chat import (ChatPromptTemplate,
+                                    HumanMessagePromptTemplate,
+                                    SystemMessagePromptTemplate)
+from notion_fetcher import NotionWeeklyReportFetcher
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 from tqdm import tqdm
-
-from .notion_fetcher import NotionWeeklyReportFetcher
-from .utility import ACADEMIC_PERIODS, SlackCallbackHandler
+from utility import ACADEMIC_PERIODS, SlackCallbackHandler
 
 load_dotenv()
 
@@ -72,22 +73,24 @@ class CoPyBot:
         def say_function(message):
             say(message)
 
-        callback_manager = CallbackManager([SlackCallbackHandler(say_function)]) if self.streaming else None
+        callback_manager = CallbackManager([SlackCallbackHandler(say_function)]) if self.is_streaming else None
 
-        return ChatOpenAI(temperature=0, openai_api_key=os.environ.get("OPENAI_API_KEY"), model_name="gpt-3.5-turbo", streaming=self.streaming, callback_manager=callback_manager)
+        return ChatOpenAI(temperature=0,
+                          openai_api_key=os.environ.get("OPENAI_API_KEY"),
+                          model_name="gpt-3.5-turbo",
+                          streaming=self.is_streaming,
+                          callback_manager=callback_manager)
 
     def weekly_summary(self, period, month, i, week, say):
         notion_api_key = os.environ.get("NOTION_API_KEY")
-        table_id = os.environ.get("TABLE_ID")
-        target_period_col = "活動報告"
-        client = NotionWeeklyReportFetcher(notion_api_key, table_id, target_period_col)
+        client = NotionWeeklyReportFetcher(notion_api_key)
 
         weekly_reports = client.fetch_records_for_week(period.quarter, week)
 
         if not weekly_reports:
             return None
 
-        if self.streaming:
+        if self.is_streaming:
             say(f"{month}月第{i + 1}週の週報を要約しています...")
 
         return self.chain.run(month=month, weekly_reports=weekly_reports)
@@ -95,7 +98,7 @@ class CoPyBot:
     def monthly_summary(self, summaries, month, say):
         launch_comment = "各週の内容から１か月分の要約を作成中..."
         print(launch_comment)
-        if self.streaming:
+        if self.is_streaming:
             say(launch_comment)
 
         concat_summary = " ".join(summaries)
@@ -126,7 +129,7 @@ class CoPyBot:
         @self.app.action("mode_selection")
         def message_month_selection(body, ack, say):
             ack()
-            self.streaming = int(body["actions"][0]["selected_option"]["value"])
+            self.is_streaming = int(body["actions"][0]["selected_option"]["value"])
 
             text = "マンスリーレビューを作成したい対象月を選んでね。"
             say(
@@ -169,3 +172,8 @@ class CoPyBot:
 
     def start(self):
         SocketModeHandler(self.app, os.environ["SLACK_APP_TOKEN"]).start()
+
+
+if __name__ == "__main__":
+    bot = CoPyBot()
+    bot.start()
