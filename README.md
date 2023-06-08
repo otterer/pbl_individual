@@ -28,7 +28,7 @@ python src/copybot_pdf.py
 * ストリーミングモードの有無を選択した上でPDFファイルを投稿する。
 * 処理完了の旨をBotが回答したら、PDFに関する任意の質問やタスク指示を投稿する（その際、`質問だよ`or`聞くね`を文頭に書く。）
 * PDFから質問やタスク指示と関連するページを探索し、その情報に基づきBotが回答してくれる。
-![タイトルなし](https://github.com/otterer/pbl_individual/assets/82159549/4fd12601-ba78-4f1e-82ac-c91ac4922971)
+![image](https://github.com/otterer/pbl_individual/assets/82159549/4fd12601-ba78-4f1e-82ac-c91ac4922971)
 
 
 # Markdownファイルの要約
