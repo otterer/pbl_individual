@@ -62,4 +62,5 @@ python src/copybot_md.py
 * `マークダウン`を含む文言をSlackチャンネルに投稿する。
 * Botから返答があったら、Notionからエクスポートしたマークダウンファイルを投稿する。
 * Botが要約してくれる。
+
 ![image](https://github.com/yellow-seed/slack_bolt_sample/assets/82159549/aed3c88c-bd96-4df9-b3df-a8e295486c54)
