@@ -49,7 +49,7 @@ python src/copybot_pdf.py
 * PDF形式でエクスポートした任意のNotionページをSlackに投稿するだけで、そのドキュメントに関することなら何でもBotが答えてくれる。要約や振り返り素案の作成もしてくれる。
 
 ## ストリーミングモードについて
-#8 で実装した機能です。プルダウンでストリーミングモードを選択するとChatGPTが回答文を生成する際、全文の生成完了を待たずに、100 tokens 生成するたびに逐次Slackに投稿を行います。Botからの応答時間が長くなることによるユーザーの違和感を軽減するための機能です。
+[#8](https://github.com/yellow-seed/slack_bolt_sample/pull/8) で実装した機能です。プルダウンでストリーミングモードを選択するとChatGPTが回答文を生成する際、全文の生成完了を待たずに、100 tokens 生成するたびに逐次Slackに投稿を行います。Botからの応答時間が長くなることによるユーザーの違和感を軽減するための機能です。
 
 ## 動作イメージ
 ![image](https://github.com/yellow-seed/slack_bolt_sample/assets/82159549/934034a4-8df8-46b1-b42d-c446668ffc83)
